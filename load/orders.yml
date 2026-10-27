@@ -1,0 +1,22 @@
+config:
+  target: "http://localhost:3001"
+  phases:
+    - duration: 60
+      arrivalRate: 100
+      name: "100 orders per second"
+  processor: "./processor.js"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Create orders"
+    flow:
+      - function: "pickSku"
+      - post:
+          url: "/orders"
+          json:
+            sku: "{{ sku }}"
+            qty: 1
+          expect:
+            - statusCode: 201

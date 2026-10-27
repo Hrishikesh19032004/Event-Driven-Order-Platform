@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS inventory (
+  sku TEXT PRIMARY KEY,
+  stock INT NOT NULL CHECK (stock >= 0)
+);
+CREATE TABLE IF NOT EXISTS reservations (
+  order_id UUID PRIMARY KEY,
+  sku TEXT NOT NULL,
+  qty INT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS outbox (
+  id UUID PRIMARY KEY,
+  topic TEXT NOT NULL,
+  key TEXT NOT NULL,
+  payload JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  published_at TIMESTAMPTZ
+);
+CREATE TABLE IF NOT EXISTS processed_events (event_id UUID PRIMARY KEY);
+INSERT INTO inventory VALUES ('SKU-1', 100) ON CONFLICT DO NOTHING;

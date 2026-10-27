@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS payments (
+  order_id UUID PRIMARY KEY,
+  amount INT NOT NULL,
+  status TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS outbox (
+  id UUID PRIMARY KEY,
+  topic TEXT NOT NULL,
+  key TEXT NOT NULL,
+  payload JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  published_at TIMESTAMPTZ
+);
+CREATE TABLE IF NOT EXISTS processed_events (event_id UUID PRIMARY KEY);

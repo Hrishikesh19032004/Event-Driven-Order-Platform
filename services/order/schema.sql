@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS orders (
+  id UUID PRIMARY KEY,
+  sku TEXT NOT NULL,
+  qty INT NOT NULL CHECK (qty > 0),
+  status TEXT NOT NULL DEFAULT 'PENDING',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS outbox (
+  id UUID PRIMARY KEY,
+  topic TEXT NOT NULL,
+  key TEXT NOT NULL,
+  payload JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  published_at TIMESTAMPTZ
+);
+CREATE TABLE IF NOT EXISTS processed_events (event_id UUID PRIMARY KEY);
